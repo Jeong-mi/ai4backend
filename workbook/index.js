@@ -1,14 +1,22 @@
 var http = require("http");
-
+var fs = require('fs')
 //1. 함수 `onRequest()` 인자에 request와 response를 넣어줍니다.
 function onRequest(req, res) {
-  res.writeHead(200, { "Content-Type": "text/plain" });
 
-  //2. html 본문(body)에 보여지는 부분을 입력하는 메서드인 res.write()를 사용해서 "Hello World"를 띄우세요.
-  res.write("Hello World");
-  console.log('server response!!!');
-  //3. 응답을 종료하는 메서드인 res.end()를 작성하세요.
-  res.end();
+  //응답의 콘텐츠 형식이 HTML인 파일을 가져옵니다.
+  res.writeHead(200, { "Content-Type": "text/html" });
+
+  fs.readFile('./index.html', 'utf8', (err, data) => {
+    if(err){
+      res.writeHead(404)
+      console.log(err)
+      return res.end("error!!!!!!!!1")
+    }
+    console.log(data)
+    res.write(data)
+    res.end()
+  })
+  console.log("비동기로 동작돼서 fs가 늦게 동작됨")
 }
 
 console.log('server start!!!!');
